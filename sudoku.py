@@ -64,7 +64,6 @@ def solvable(grid):
 
 
 def solve(row, col, grid):
-    # import pprint
     if row == 9:
         row = 0
         col += 1
