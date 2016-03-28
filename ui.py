@@ -80,8 +80,21 @@ class SudokuBoard(object):
         if not solvable(arr):
             print 'Cannot solve grid!'
 
+    def error_popup(self):
+        from Tkinter import Toplevel, Label
+        tl = Toplevel()
+        message = Label(tl, text='Cannot solve grid!')
+        message.pack()
+        close = Button(tl, text='Okay', command=tl.destroy)
+        close.pack()
+
     def attempt(self):
-        self.double_check()
+        if self.double_check():
+            board = self.get_buttons()
+            solve(0, 0, board)
+            self.set_buttons(board)
+        else:
+            self.error_popup()
 
     def _create_buttons(self):
         buttons = list()
