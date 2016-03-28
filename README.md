@@ -24,3 +24,5 @@ As you can see the resulting board is immediately appended afterwards.
 For the UI, simply start it using `$ python ui.py`. The UI will immediately try
 to load the two problem sets from `problems/`. You can of course load easy or
 hard problem sets or create your own.
+
+![Sample UI Usage](sample.png)
