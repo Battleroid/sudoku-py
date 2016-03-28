@@ -26,3 +26,7 @@ to load the two problem sets from `problems/`. You can of course load easy or
 hard problem sets or create your own.
 
 ![Sample UI Usage](sample.png)
+
+### requirements
+
+Just Python, no dependencies :smile:.
