@@ -1,6 +1,6 @@
 from random import randint
-from Tkinter import Frame, Tk, Button, Toplevel, Label
-from sudoku import solvable, solve, inflate
+from Tkinter import Frame, Tk, Button, Toplevel, Label, W
+from sudoku import solvable, solve, inflate, already_valid
 
 
 class SudokuBoard(object):
@@ -19,7 +19,7 @@ class SudokuBoard(object):
         self.sudoku_frame = Frame(self.root)
         self.control_frame = Frame(self.root)
         self.sudoku_frame.grid(row=0, column=0)
-        self.control_frame.grid(row=1, column=0)
+        self.control_frame.grid(row=1, column=0, sticky=W)
         self.buttons = self._create_buttons()
         self.clear_btn = Button(self.control_frame, text='Clear',
                                 command=lambda: self.clear())
@@ -39,13 +39,23 @@ class SudokuBoard(object):
 
     def _load(self, filename):
         problems = list()
-        with open(filename, 'r') as f:
-            problems = f.readlines()
+        try:
+            with open(filename, 'r') as f:
+                problems = f.readlines()
+        except IOError:
+            print 'IOError: Cannot open', filename
         return problems
+
+    def clear_color(self):
+        for x in range(9):
+            for y in range(9):
+                btn = self.buttons[x][y]
+                btn['bg'] = 'white'
 
     def clear(self):
         cleared = [[0 for y in range(9)] for x in range(9)]
         self.set_buttons(cleared)
+        self.clear_color()
 
     def pick(self, problems):
         problem = inflate(problems[randint(0, len(problems))])
@@ -75,9 +85,19 @@ class SudokuBoard(object):
             arr.append(row)
         return arr
 
+    def show_troublemakers(self, arr):
+        for x in range(9):
+            for y in range(9):
+                if arr[x][y] != 0:
+                    if already_valid(x, y, arr):
+                        self.buttons[x][y]['bg'] = 'white'
+                    else:
+                        self.buttons[x][y]['bg'] = 'red'
+
     def double_check(self):
         arr = self.get_buttons()
         if not solvable(arr):
+            self.show_troublemakers(arr)
             return False
         return True
 
@@ -90,6 +110,7 @@ class SudokuBoard(object):
 
     def attempt(self):
         if self.double_check():
+            self.clear_color()
             board = self.get_buttons()
             solve(0, 0, board)
             self.set_buttons(board)
@@ -102,13 +123,14 @@ class SudokuBoard(object):
         for x in range(9):
             row = list()
             for y in range(9):
-                btn = Button(self.sudoku_frame, text='0',
+                btn = Button(self.sudoku_frame, text='0', bg='white',
                              command=lambda x=x, y=y: self.cycle(x, y))
                 btn.grid(row=x, column=y)
                 row.append(btn)
             buttons.append(row)
 
         return buttons
+
 
 if __name__ == '__main__':
     SudokuBoard()
