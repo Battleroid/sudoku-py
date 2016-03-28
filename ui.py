@@ -23,7 +23,8 @@ class SudokuBoard(object):
         self.buttons = self._create_buttons()
         self.clear_btn = Button(self.control_frame, text='Clear',
                                 command=lambda: self.clear())
-        self.solve_btn = Button(self.control_frame, text='Solve')
+        self.solve_btn = Button(self.control_frame, text='Solve',
+                                command=lambda: self.attempt())
         self.easy_btn = Button(self.control_frame, text='Easy',
                                command=lambda: self.pick(easy))
         self.hard_btn = Button(self.control_frame, text='Hard',
@@ -50,14 +51,37 @@ class SudokuBoard(object):
         problem = inflate(problems[randint(0, len(problems))])
         self.set_buttons(problem)
 
+    def cycle(self, x, y):
+        btn = self.buttons[x][y]
+        val = int(btn['text'])
+        if val == 9:
+            val = 0
+        else:
+            val += 1
+        btn['text'] = str(val)
+
     def set_buttons(self, arr):
         for x in range(9):
             for y in range(9):
                 btn = self.buttons[x][y]
                 btn.config(text=str(arr[x][y]))
 
+    def get_buttons(self):
+        arr = list()
+        for x in range(9):
+            row = list()
+            for y in range(9):
+                row.append(int(self.buttons[x][y]['text']))
+            arr.append(row)
+        return arr
+
+    def double_check(self):
+        arr = self.get_buttons()
+        if not solvable(arr):
+            print 'Cannot solve grid!'
+
     def attempt(self):
-        pass
+        self.double_check()
 
     def _create_buttons(self):
         buttons = list()
@@ -65,7 +89,8 @@ class SudokuBoard(object):
         for x in range(9):
             row = list()
             for y in range(9):
-                btn = Button(self.sudoku_frame, text='0')
+                btn = Button(self.sudoku_frame, text='0',
+                             command=lambda x=x, y=y: self.cycle(x, y))
                 btn.grid(row=x, column=y)
                 row.append(btn)
             buttons.append(row)
