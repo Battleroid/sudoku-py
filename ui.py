@@ -1,5 +1,5 @@
 from random import randint
-from Tkinter import Frame, Tk, Button
+from Tkinter import Frame, Tk, Button, Toplevel, Label
 from sudoku import solvable, solve, inflate
 
 
