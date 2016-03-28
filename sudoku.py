@@ -1,4 +1,5 @@
 def inflate(line):
+    '''Transforms a string into 2D array'''
     grid = list()
     cnt = 0
 
@@ -13,6 +14,7 @@ def inflate(line):
 
 
 def legal(row, col, val, grid):
+    '''Checks if a given move at the location with a value is legal'''
     # col check
     for i in range(9):
         if row == i:
@@ -44,11 +46,13 @@ def legal(row, col, val, grid):
 
 
 def already_valid(row, col, grid):
+    '''Shortcut to check if the current cell is valid or not'''
     val = grid[row][col]
     return legal(row, col, val, grid)
 
 
 def solvable(grid):
+    '''Check if the grid can be solved'''
     can_solve = False
     empty = True
     for row in range(9):
@@ -64,6 +68,7 @@ def solvable(grid):
 
 
 def solve(row, col, grid):
+    '''Attempt to find a solution for the given grid, starting at x, y'''
     if row == 9:
         row = 0
         col += 1
@@ -91,4 +96,5 @@ if __name__ == '__main__':
         solve(0, 0, grid)
         pprint.pprint(grid)
     else:
-        print 'Incorrect usage'
+        print 'Usage:'
+        print '    python', __file__, '<puzzle>'
