@@ -78,7 +78,8 @@ class SudokuBoard(object):
     def double_check(self):
         arr = self.get_buttons()
         if not solvable(arr):
-            print 'Cannot solve grid!'
+            return False
+        return True
 
     def error_popup(self):
         tl = Toplevel()
