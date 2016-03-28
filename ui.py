@@ -81,7 +81,6 @@ class SudokuBoard(object):
             print 'Cannot solve grid!'
 
     def error_popup(self):
-        from Tkinter import Toplevel, Label
         tl = Toplevel()
         message = Label(tl, text='Cannot solve grid!')
         message.pack()
