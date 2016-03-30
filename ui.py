@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, shuffle
 from Tkinter import Frame, Tk, Button, Toplevel, Label, W
 from sudoku import solvable, solve, inflate, already_valid
 
@@ -26,13 +26,16 @@ class SudokuBoard(object):
         self.solve_btn = Button(self.control_frame, text='Solve',
                                 command=lambda: self.attempt())
         self.easy_btn = Button(self.control_frame, text='Easy',
-                               command=lambda: self.pick(easy))
+                               command=lambda: self.puzzle(easy, 81 - 36))
+        self.med_btn = Button(self.control_frame, text='Medium',
+                              command=lambda: self.puzzle(easy, 81 - 46))
         self.hard_btn = Button(self.control_frame, text='Hard',
-                               command=lambda: self.pick(hard))
+                               command=lambda: self.puzzle(hard, 81 - 56))
         self.easy_btn.grid(row=0, column=0)
-        self.hard_btn.grid(row=0, column=1)
-        self.clear_btn.grid(row=0, column=2)
-        self.solve_btn.grid(row=0, column=3)
+        self.med_btn.grid(row=0, column=1)
+        self.hard_btn.grid(row=0, column=2)
+        self.clear_btn.grid(row=0, column=3)
+        self.solve_btn.grid(row=0, column=4)
 
         # start
         self.root.mainloop()
@@ -60,6 +63,24 @@ class SudokuBoard(object):
     def pick(self, problems):
         problem = inflate(problems[randint(0, len(problems))])
         self.set_buttons(problem)
+
+    def puzzle(self, problems, n):
+        problem = inflate(problems[randint(0, len(problems))])
+        solve(0, 0, problem)
+        locs = list()
+        for x in range(9):
+            for y in range(9):
+                locs.append((x, y))
+        shuffle(locs)
+
+        while n > 0:
+            loc = locs.pop()
+            x, y = loc
+            problem[x][y] = 0
+            n -= 1
+
+        self.set_buttons(problem)
+
 
     def cycle(self, x, y):
         btn = self.buttons[x][y]
