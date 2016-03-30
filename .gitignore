@@ -1,5 +1,10 @@
+*.gz
+*.log
+*.aux
+*.out
 *.pyc
 .python-version
 *.vim
 *.swp
 ref.py
+*.toc
